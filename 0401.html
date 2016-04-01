@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>拖拽文件上传</title>
+</head>
+<body>
+	<form id="frmTmp">
+		<fieldset>
+			<legend>拖拽上传文件</legend>
+			<ul id="ulUpload" ondrop="dropFile(event)" ondragenter="return false" ondragover="return false"></ul>
+		</fieldset>
+	</form>
+	<script type="text/javascript">
+		function dropFile(event){
+			//将选择的文件预览
+			fileUpload_moveFile(event.dataTransfer.files);
+			//停止事件的传播
+			event.stopPropagation();
+			//阻止默认事件的发生
+			event.preventDefault();
+		}
+
+		function $$(el){
+			return document.getElementById(el);
+		}
+
+		function fileUpload_moveFile(f){
+			for(var i=0; i<f.length; i++){
+				var tmpFile = f[i];
+				var reader = new FileReader();
+				reader.readAsDataURL(tmpFile);
+				reader.onload = (
+					function(fl){
+						return function(e){
+							var eleSpan = document.creatElement("span");
+							eleSpan.innerHTML = ['<img src="',e.target.result,'" title="',fl.name,'" />'].join('');
+							$$('ulUpload').insertBefore(eleSpan,null);
+						}
+					}
+				)
+			}
+		}
+	</script>
+</body>
+</html>
